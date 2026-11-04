@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hebrew-Malayalam</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Inter & Heebo -->
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Heebo', 'Inter', sans-serif;
+        }
+        .malayalam-text {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
+
+    <!-- Header Section -->
+    <header class="bg-white/85 backdrop-blur-md shadow-sm sticky top-0 z-50 border-b border-slate-100">
+        <div class="max-w-4xl mx-auto px-4 py-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+            
+            <!-- Logo & Title -->
+            <div class="flex items-center gap-3">
+                <div class="bg-indigo-600 text-white p-3 rounded-2xl shadow-md shadow-indigo-200">
+                    <i class="fa-solid fa-book-atlas text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold bg-gradient-to-r from-indigo-600 to-blue-600 bg-clip-text text-transparent malayalam-text">ഹീബ്രു - മലയാളം നിഘണ്ടു</h1>
+                    <p class="text-xs text-slate-500 malayalam-text">അടിസ്ഥാന പദാവലി പഠനവും പരിചയവും</p>
+                </div>
+            </div>
+
+            <!-- Tab Switcher -->
+            <div class="flex items-center bg-slate-100 p-1 rounded-2xl">
+                <button onclick="switchTab('dictionary')" id="tab-dict" class="px-4 py-2 rounded-xl text-xs font-bold transition-all bg-white text-indigo-600 shadow-sm malayalam-text">നിഘണ്ടു</button>
+                <button onclick="switchTab('quiz')" id="tab-quiz" class="px-4 py-2 rounded-xl text-xs font-bold transition-all text-slate-600 hover:text-slate-900 malayalam-text">ക്വിസ് ഗെയിം</button>
+            </div>
+
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="flex-1 max-w-4xl w-full mx-auto px-4 py-6 flex flex-col gap-6">
+
+        <!-- Dictionary View Section -->
+        <div id="section-dictionary" class="flex flex-col gap-6">
+            <!-- Search & Filter Bar -->
+            <div class="bg-white p-4 rounded-3xl shadow-sm border border-slate-100 flex flex-col gap-4">
+                
+                <!-- Search Input -->
+                <div class="relative">
+                    <span class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none text-slate-400">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </span>
+                    <input 
+                        type="text" 
+                        id="search-input" 
+                        oninput="filterWords()"
+                        placeholder="ഹീബ്രു, ഇംഗ്ലീഷ് അല്ലെങ്കിൽ മലയാളത്തിൽ തിരയുക..." 
+                        class="w-full pr-11 pl-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all malayalam-text">
+                </div>
+
+                <!-- Categories Filter Buttons -->
+                <div class="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-thin">
+                    <button onclick="filterCategory('הכול')" class="cat-btn px-4 py-2 rounded-xl text-xs font-medium whitespace-nowrap transition-all bg-indigo-600 text-white shadow-sm shadow-indigo-100 malayalam-text">എല്ലാം</button>
+                    <button onclick="filterCategory('ברכות ובסיס')" class="cat-btn px-4 py-2 rounded-xl text-xs font-medium whitespace-nowrap transition-all bg-slate-100 text-slate-600 hover:bg-slate-200 malayalam-text">അഭിവാദ്യങ്ങളും അടിസ്ഥാനവും</button>
+                    <button onclick="filterCategory('אנשים ומשפחה')" class="cat-btn px-4 py-2 rounded-xl text-xs font-medium whitespace-nowrap transition-all bg-slate-100 text-slate-600 hover:bg-slate-200 malayalam-text">ആളുകളും കുടുംബവും</button>
+                    <button onclick="filterCategory('מקומות וסביבה')" class="cat-btn px-4 py-2 rounded-xl text-xs font-medium whitespace-nowrap transition-all bg-slate-100 text-slate-600 hover:bg-slate-200 malayalam-text">സ്ഥലങ്ങളും ചുറ്റുപാടും</button>
+                    <button onclick="filterCategory('פעלים נפוצים')" class="cat-btn px-4 py-2 rounded-xl text-xs font-medium whitespace-nowrap transition-all bg-slate-100 text-slate-600 hover:bg-slate-200 malayalam-text">സാധാരണ ക്രിയകൾ</button>
+                    <button onclick="filterCategory('שאלות ולוגיסטיקה')" class="cat-btn px-4 py-2 rounded-xl text-xs font-medium whitespace-nowrap transition-all bg-slate-100 text-slate-600 hover:bg-slate-200 malayalam-text">ചോദ്യങ്ങളും ലോജിസ്റ്റിക്സും</button>
+                    <button onclick="filterCategory('זמן ומספרים')" class="cat-btn px-4 py-2 rounded-xl text-xs font-medium whitespace-nowrap transition-all bg-slate-100 text-slate-600 hover:bg-slate-200 malayalam-text">സമയവും സംഖ്യകളും</button>
+                    <button onclick="filterCategory('אוכל ושתייה')" class="cat-btn px-4 py-2 rounded-xl text-xs font-medium whitespace-nowrap transition-all bg-slate-100 text-slate-600 hover:bg-slate-200 malayalam-text">ഭക്ഷണവും പാനീയവും</button>
+                    <button onclick="filterCategory('תארים ומצבים')" class="cat-btn px-4 py-2 rounded-xl text-xs font-medium whitespace-nowrap transition-all bg-slate-100 text-slate-600 hover:bg-slate-200 malayalam-text">നാമവിശേഷണങ്ങളും അവസ്ഥകളും</button>
+                </div>
+
+            </div>
+
+            <!-- Dictionary Grid -->
+            <div id="words-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- Dynamic Cards Inserted Here -->
+            </div>
+
+            <!-- Empty State -->
+            <div id="empty-state" class="hidden flex flex-col items-center justify-center py-12 text-center">
+                <div class="bg-indigo-50 text-indigo-500 p-4 rounded-full mb-3 text-2xl">
+                    <i class="fa-solid fa-face-frown"></i>
+                </div>
+                <h3 class="text-base font-bold text-slate-700 malayalam-text">വാക്കുകളൊന്നും കണ്ടെത്തിയില്ല</h3>
+                <p class="text-xs text-slate-400 mt-1 malayalam-text">വ്യത്യസ്തമായ രീതിയിൽ തിരയുകയോ മറ്റൊരു വിഭാഗം തിരഞ്ഞെടുക്കുകയോ ചെയ്യുക.</p>
+            </div>
+        </div>
+
+        <!-- Quiz View Section -->
+        <div id="section-quiz" class="hidden flex flex-col gap-6">
+            <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 flex flex-col items-center text-center max-w-xl mx-auto w-full">
+                
+                <!-- Quiz Header / Score -->
+                <div class="flex items-center justify-between w-full mb-6">
+                    <span id="quiz-progress" class="text-xs font-bold text-slate-400 malayalam-text">ചോദ്യം 1 / 10</span>
+                    <span id="quiz-score" class="text-xs font-bold px-3 py-1 bg-indigo-50 text-indigo-600 rounded-full malayalam-text">സ്കോർ: 0</span>
+                </div>
+
+                <!-- Question Card -->
+                <div class="mb-6 w-full">
+                    <p class="text-xs text-indigo-600 font-semibold mb-2 malayalam-text">ഇനിപ്പറയുന്ന വാക്കിന്റെ ശരിയായ അർത്ഥം എന്താണ്?</p>
+                    <h2 id="quiz-word" class="text-3xl font-bold text-slate-800 mb-1">שָׁלוֹם</h2>
+                    <p id="quiz-translit" class="text-sm text-slate-400 italic">(Shalom)</p>
+                </div>
+
+                <!-- Options Container -->
+                <div id="quiz-options" class="grid grid-cols-1 gap-3 w-full mb-6">
+                    <!-- Dynamic Options -->
+                </div>
+
+                <!-- Next Question Button -->
+                <button id="next-btn" onclick="nextQuestion()" class="hidden w-full py-3 bg-indigo-600 text-white rounded-2xl font-bold text-sm shadow-md shadow-indigo-100 hover:bg-indigo-700 transition-all malayalam-text">
+                    അടുത്ത ചോദ്യം <i class="fa-solid fa-arrow-left mr-2"></i>
+                </button>
+
+                <!-- Quiz Complete Overlay State -->
+                <div id="quiz-complete" class="hidden flex flex-col items-center py-8">
+                    <div class="bg-green-50 text-green-600 p-4 rounded-full text-3xl mb-3">
+                        <i class="fa-solid fa-trophy"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-800 mb-1 malayalam-text">അഭിനന്ദനങ്ങൾ!</h3>
+                    <p id="final-score-text" class="text-sm text-slate-500 mb-6 malayalam-text">നിങ്ങൾ ക്വിസ് വിജയകരമായി പൂർത്തിയാക്കി.</p>
+                    <button onclick="startQuiz()" class="px-6 py-3 bg-indigo-600 text-white rounded-2xl font-bold text-sm shadow-md shadow-indigo-100 hover:bg-indigo-700 transition-all malayalam-text">
+                        വീണ്ടും ആരംഭിക്കുക <i class="fa-solid fa-rotate-right mr-2"></i>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="mt-auto py-6 text-center text-xs text-slate-400 border-t border-slate-100">
+        <p class="malayalam-text">ഹീബ്രു - മലയാളം നിഘണ്ടു &copy; 2026</p>
+    </footer>
+
+    <!-- JavaScript Data and Application Logic -->
+    <script>
+        // Current category
+        let currentCategory = 'הכול';
+
+        // Dictionary Data (100 words based on source PDF with full Niqqud)
+        const dictionaryData = [
+            // Greetings & Basics
+            { id: 1, he: "שָׁלוֹם", translit: "Shalom", ml: "ഹലോ / സമാധാനം", ml_trans: "Hello / Peace", cat: "ברכות ובסיס" },
+            { id: 2, he: "תּוֹדָה", translit: "Toda", ml: "നന്ദി", ml_trans: "Thank you", cat: "ברכות ובסיס" },
+            { id: 3, he: "בְּבַקָּשָׁה", translit: "Bevakasha", ml: "தயவுசெய்து / സ്വാഗതം", ml_trans: "Please / You're welcome", cat: "ברכות ובסיס" },
+            { id: 4, he: "סְלִיחָה", translit: "Sliha", ml: "ക്ഷമിക്കുക / മാപ്പ്", ml_trans: "Sorry / Excuse me", cat: "ברכות ובסיס" },
+            { id: 5, he: "כֵּן", translit: "Ken", ml: "അതെ", ml_trans: "Yes", cat: "ברכות ובסיס" },
+            { id: 6, he: "לֹא", translit: "Lo", ml: "ഇല്ല", ml_trans: "No", cat: "ברכות ובסיס" },
+            { id: 7, he: "בְּסֵדֶר", translit: "Beseder", ml: "ശരി / കുഴപ്പമില്ല", ml_trans: "Okay / Alright", cat: "ברכות ובסיס" },
+            { id: 8, he: "בֹּקֶר טוֹב", translit: "Boker tov", ml: "സുപ്രഭാതം", ml_trans: "Good morning", cat: "ברכות ובסיס" },
+            { id: 9, he: "עֶרֶב טוֹב", translit: "Erev tov", ml: "শুভ সন্ধ্যা / നല്ല വൈകുന്നേരം", ml_trans: "Good evening", cat: "ברכות ובסיס" },
+            { id: 10, he: "לַיְלָה טוֹב", translit: "Layla tov", ml: "ശുഭ രാത്രി", ml_trans: "Goodnight", cat: "ברכות ובסיס" },
+            { id: 11, he: "לְהִתְרָאוֹת", translit: "Lehitra'ot", ml: "പിന്നീട് കാണാം", ml_trans: "Goodbye", cat: "ברכות ובסיס" },
+            { id: 12, he: "מָה נִשְׁמָע?", translit: "Ma nishma?", ml: "എങ്ങനെയിരിക്കുന്നു?", ml_trans: "What's up? / How are you?", cat: "ברכות ובסיס" },
+            
+            // People & Family
+            { id: 13, he: "אֲנִי", translit: "Ani", ml: "ഞാൻ", ml_trans: "I", cat: "אנשים ומשפחה" },
+            { id: 14, he: "אַתָּה", translit: "Ata", ml: "നീ / നിങ്ങൾ (പുരുഷൻ)", ml_trans: "You (singular male)", cat: "אנשים ומשפחה" },
+            { id: 15, he: "אַתְּ", translit: "At", ml: "നീ / നിങ്ങൾ (സ്ത്രീ)", ml_trans: "You (singular female)", cat: "אנשים ומשפחה" },
+            { id: 16, he: "אֲנַחְנוּ", translit: "Anahnu", ml: "ഞങ്ങൾ", ml_trans: "We", cat: "אנשים ומשפחה" },
+            { id: 17, he: "אִישׁ", translit: "Ish", ml: "പുരുഷൻ / മനുഷ്യൻ", ml_trans: "Man", cat: "אנשים ומשפחה" },
+            { id: 18, he: "אִשָּׁה", translit: "Isha", ml: "സ്ത്രീ", ml_trans: "Woman", cat: "אנשים ומשפחה" },
+            { id: 19, he: "יֶלֶד", translit: "Yeled", ml: "കുട്ടി / ആൺകുട്ടി", ml_trans: "Boy / Child", cat: "אנשים ומשפחה" },
+            { id: 20, he: "יַלְדָּה", translit: "Yalda", ml: "പെൺകുട്ടി", ml_trans: "Girl", cat: "אנשים ומשפחה" },
+            { id: 21, he: "מִשְׁפָּחָה", translit: "Mishpaha", ml: "കുടുംബം", ml_trans: "Family", cat: "אנשים ומשפחה" },
+            { id: 22, he: "אַבָּא", translit: "Aba", ml: "അച്ഛൻ", ml_trans: "Dad", cat: "אנשים ומשפחה" },
+            { id: 23, he: "אִמָּא", translit: "Ima", ml: "അമ്മ", ml_trans: "Mom", cat: "אנשים ומשפחה" },
+            { id: 24, he: "חָבֵר", translit: "Haver", ml: "സുഹൃത്ത്", ml_trans: "Friend", cat: "אנשים ומשפחה" },
+
+            // Places & Environment
+            { id: 25, he: "בַּיִT", translit: "Bayit", ml: "വീട്", ml_trans: "Home / House", cat: "מקומות וסביבה" },
+            { id: 26, he: "עֲבוֹדָה", translit: "Avoda", ml: "ജോലി", ml_trans: "Work / Job", cat: "מקומות וסביבה" },
+            { id: 27, he: "אוּלְפָּן", translit: "Ulpan", ml: "ഉൽപാൻ (ഹീബ്രു പഠനകേന്ദ്രം)", ml_trans: "Hebrew school", cat: "מקומות וסביבה" },
+            { id: 28, he: "חָנוּת", translit: "Hanut", ml: "കട", ml_trans: "Shop / Store", cat: "מקומות וסביבה" },
+            { id: 29, he: "סוּפֶּרְמַרְקֶט", translit: "Supermarket", ml: "സൂപ്പർമാർക്കറ്റ്", ml_trans: "Supermarket", cat: "מקומות וסביבה" },
+            { id: 30, he: "רְחוֹב", translit: "Rehov", ml: "തെരുവ്", ml_trans: "Street", cat: "מקומות וסביבה" },
+            { id: 31, he: "עִיר", translit: "Ir", ml: "നഗരം", ml_trans: "City", cat: "מקומות וסביבה" },
+            { id: 32, he: "אֶרֶץ", translit: "Aretz", ml: "രാജ്യം / ഭൂമി", ml_trans: "Country / Land", cat: "מקומות וסביבה" },
+            { id: 33, he: "יִשְׂרָאֵל", translit: "Yisrael", ml: "ഇസ്രായേൽ", ml_trans: "Israel", cat: "מקומות וסביבה" },
+            { id: 34, he: "בֵּית חוֹלִים", translit: "Beit holim", ml: "ആശുപത്രി", ml_trans: "Hospital", cat: "מקומות וסביבה" },
+            { id: 35, he: "בֵּית מִרְקַחַת", translit: "Beit mirkahat", ml: "ഫാർമസി", ml_trans: "Pharmacy", cat: "מקומות וסביבה" },
+            { id: 36, he: "תַּחֲנָה", translit: "Tahana", ml: "സ്റ്റേഷൻ / ബസ് സ്റ്റോപ്പ്", ml_trans: "Station / Bus stop", cat: "מקומות וסביבה" },
+
+            // Common Verbs
+            { id: 37, he: "רוֹצֶה", translit: "Rotze", ml: "ആഗ്രഹിക്കുന്നു / വേണം", ml_trans: "Want", cat: "פעלים נפוצים" },
+            { id: 38, he: "מְדַבֵּר", translit: "Medaber", ml: "സംസാരിക്കുന്നു", ml_trans: "Speak / Talk", cat: "פעלים נפוצים" },
+            { id: 39, he: "מְבִין", translit: "Mevin", ml: "മനസ്സിലാക്കുന്നു", ml_trans: "Understand", cat: "פעלים נפוצים" },
+            { id: 40, he: "יוֹדֵעַ", translit: "Yode'a", ml: "അറിയാം", ml_trans: "Know", cat: "פעלים נפוצים" },
+            { id: 41, he: "עוֹשֶׂה", translit: "Oseh", ml: "ചെയ്യുന്നു", ml_trans: "Do / Make", cat: "פעלים נפוצים" },
+            { id: 42, he: "הוֹלֵךְ", translit: "Holekh", ml: "പോകുന്നു / നടക്കുന്നു", ml_trans: "Go / Walk", cat: "פעלים נפוצים" },
+            { id: 43, he: "בָּא", translit: "Ba", ml: "വരുന്നു", ml_trans: "Come", cat: "פעלים נפוצים" },
+            { id: 44, he: "אוֹכֵל", translit: "Ohel", ml: "കഴിക്കുന്നു", ml_trans: "Eat", cat: "פעלים נפוצים" },
+            { id: 45, he: "שׁוֹתֶה", translit: "Shoteh", ml: "കുടിക്കുന്നു", ml_trans: "Drink", cat: "פעלים נפוצים" },
+            { id: 46, he: "קוֹנֶה", translit: "Koneh", ml: "വാങ്ങുന്നു", ml_trans: "Buy", cat: "פעלים נפוצים" },
+            { id: 47, he: "עוֹבֵד", translit: "Oved", ml: "ജോലി ചെയ്യുന്നു", ml_trans: "Work", cat: "פעלים נפוצים" },
+            { id: 48, he: "צָרִיךְ", translit: "Tzarikh", ml: "ആവശ്യമുണ്ട്", ml_trans: "Need", cat: "פעלים נפוצים" },
+
+            // Questions & Logistics
+            { id: 49, he: "מִי?", translit: "Mi?", ml: "ആര്?", ml_trans: "Who?", cat: "שאלות ולוגיסטיקה" },
+            { id: 50, he: "מָה?", translit: "Ma?", ml: "എന്ത്?", ml_trans: "What?", cat: "שאלות ולוגיסטיקה" },
+            { id: 51, he: "אֵיפֹה?", translit: "Eifo?", ml: "എവിടെ?", ml_trans: "Where?", cat: "שאלות ולוגיסטיקה" },
+            { id: 52, he: "מָתַי?", translit: "Matay?", ml: "എപ്പോള്‍?", ml_trans: "When?", cat: "שאלות ולוגיסטיקה" },
+            { id: 53, he: "לָמָּה?", translit: "Lama?", ml: "എന്തുകൊണ്ട്?", ml_trans: "Why?", cat: "שאלות ולוגיסטיקה" },
+            { id: 54, he: "כַּמָּה?", translit: "Kama?", ml: "എത്ര?", ml_trans: "How much? / How many?", cat: "שאלות ולוגיסטיקה" },
+            { id: 55, he: "אֵיךְ?", translit: "Eikh?", ml: "എങ്ങനെ?", ml_trans: "How?", cat: "שאלות ולוגיסטיקה" },
+            { id: 56, he: "לְאָן?", translit: "Le'an?", ml: "എവിടേക്ക്?", ml_trans: "Where to?", cat: "שאלות ולוגיסטיקה" },
+            { id: 57, he: "יֵשׁ", translit: "Yesh", ml: "ഉണ്ട്", ml_trans: "There is / Have", cat: "שאלות ולוגיסטיקה" },
+            { id: 58, he: "אֵין", translit: "Ein", ml: "ഇല്ല", ml_trans: "There isn't / Don't have", cat: "שאלות ולוגיסטיקה" },
+            { id: 59, he: "כֶּסֶף", translit: "Kesef", ml: "പണം", ml_trans: "Money", cat: "שאלות ולוגיסטיקה" },
+            { id: 60, he: "כַּרְטִיס", translit: "Kartis", ml: "ടിക്കറ്റ് / കാർഡ്", ml_trans: "Ticket / Card", cat: "שאלות ולוגיסטיקה" },
+            { id: 61, he: "טֶלֶפוֹן", translit: "Telefon", ml: "ഫോൺ", ml_trans: "Phone", cat: "שאלות ולוגיסטיקה" },
+            { id: 62, he: "מַפְתֵּחַ", translit: "Mafte'ah", ml: "താക്കോൽ", ml_trans: "Key", cat: "שאלות ולוגיסטיקה" },
+
+            // Time & Numbers
+            { id: 63, he: "הַיּוֹם", translit: "Hayom", ml: "ഇന്ന്", ml_trans: "Today", cat: "זמן ומספרים" },
+            { id: 64, he: "אֶתְמוֹל", translit: "Etmol", ml: "ഇന്നലെ", ml_trans: "Yesterday", cat: "זמן ומספרים" },
+            { id: 65, he: "מָחָר", translit: "Mahar", ml: "നാളെ", ml_trans: "Tomorrow", cat: "זמן ומספרים" },
+            { id: 66, he: "עַכְשָׁו", translit: "Ahshav", ml: "ഇപ്പോൾ", ml_trans: "Now", cat: "זמן ומספרים" },
+            { id: 67, he: "אַחַר כָּךְ", translit: "Ahar kakh", ml: "പിന്നീട്", ml_trans: "Later", cat: "זמן ומספרים" },
+            { id: 68, he: "שָׁעָה", translit: "Sha'ah", ml: "മണിക്കൂർ / സമയം", ml_trans: "Hour / Time", cat: "זמן ומספרים" },
+            { id: 69, he: "יוֹם", translit: "Yom", ml: "ദിവസം", ml_trans: "Day", cat: "זמן ומספרים" },
+            { id: 70, he: "שָׁבוּעַ", translit: "Shavu'a", ml: "ആഴ്ച", ml_trans: "Week", cat: "זמן ומספרים" },
+            { id: 71, he: "חֹדֶשׁ", translit: "Hodesh", ml: "മാസം", ml_trans: "Month", cat: "זמן ומספרים" },
+            { id: 72, he: "שָׁנָה", translit: "Shana", ml: "വർഷം", ml_trans: "Year", cat: "זמן ומספרים" },
+            { id: 73, he: "אַחַד", translit: "Ehad", ml: "ഒന്ന് (1)", ml_trans: "One", cat: "זמן ומספרים" },
+            { id: 74, he: "שְׁתַּיִם", translit: "Shtayim", ml: "രണ്ട് (2)", ml_trans: "Two", cat: "זמן ומספרים" },
+            { id: 75, he: "שָׁלוֹשׁ", translit: "Shalosh", ml: "മൂന്ന് (3)", ml_trans: "Three", cat: "זמן ומספרים" },
+            { id: 76, he: "מֵאָה", translit: "Me'a", ml: "നൂറ് (100)", ml_trans: "One hundred", cat: "זמן ומספרים" },
+
+            // Food & Drink
+            { id: 77, he: "אֹכֶל", translit: "Okhel", ml: "ഭക്ഷണം", ml_trans: "Food", cat: "אוכל ושתייה" },
+            { id: 78, he: "מַיִם", translit: "Mayim", ml: "വെള്ളം", ml_trans: "Water", cat: "אוכל ושתייה" },
+            { id: 79, he: "קָפֶה", translit: "Kafe", ml: "കാപ്പി", ml_trans: "Coffee", cat: "אוכל ושתייה" },
+            { id: 80, he: "לֶחֶם", translit: "Lehem", ml: "അപ്പം", ml_trans: "Bread", cat: "אוכל ושתייה" },
+            { id: 81, he: "חָלָב", translit: "Halav", ml: "പാൽ", ml_trans: "Milk", cat: "אוכל ושתייה" },
+            { id: 82, he: "גְּבִינָה", translit: "Gvina", ml: "ചീസ്", ml_trans: "Cheese", cat: "אוכל ושתייה" },
+            { id: 83, he: "יְרָקוֹת", translit: "Yerakot", ml: "പച്ചക്കറികൾ", ml_trans: "Vegetables", cat: "אוכל ושתייה" },
+            { id: 84, he: "פֵּירוֹת", translit: "Peirot", ml: "പഴങ്ങൾ", ml_trans: "Fruits", cat: "אוכל ושתייה" },
+            { id: 85, he: "בָּשָׂר", translit: "Basar", ml: "യിറച്ചി", ml_trans: "Meat", cat: "אוכל ושתייה" },
+
+            // Adjectives & States
+            { id: 86, he: "טוֹב", translit: "Tov", ml: "നല്ലത്", ml_trans: "Good", cat: "תארים ומצבים" },
+            { id: 87, he: "רָע", translit: "Ra", ml: "മോശം", ml_trans: "Bad", cat: "תארים ומצבים" },
+            { id: 88, he: "גָּדוֹל", translit: "Gadol", ml: "വലിയത്", ml_trans: "Big", cat: "תארים ומצבים" },
+            { id: 89, he: "קָטָן", translit: "Katan", ml: "ചെറിയത്", ml_trans: "Small", cat: "תארים ומצבים" },
+            { id: 90, he: "חָדָשׁ", translit: "Hadash", ml: "പുതിയത്", ml_trans: "New", cat: "תארים ומצבים" },
+            { id: 91, he: "יָשָׁן", translit: "Yashan", ml: "പഴയത് (വസ്തുക്കൾ)", ml_trans: "Old (objects)", cat: "תארים ומצבים" },
+            { id: 92, he: "חָם", translit: "Ham", ml: "ചൂടുള്ള", ml_trans: "Hot", cat: "תארים ומצבים" },
+            { id: 93, he: "קָר", translit: "Kar", ml: "തണുത്ത", ml_trans: "Cold", cat: "תארים ומצבים" },
+            { id: 94, he: "יָפֶה", translit: "Yafeh", ml: "മനോഹരമായ", ml_trans: "Beautiful / Pretty", cat: "תארים ומצבים" },
+            { id: 95, he: "יָקָר", translit: "Yakar", ml: "விலை உயர்ந்த / വിലകൂടിയ", ml_trans: "Expensive", cat: "תארים ומצבים" },
+            { id: 96, he: "זוֹל", translit: "Zol", ml: "വിലകുറഞ്ഞ", ml_trans: "Cheap", cat: "תארים ומצבים" },
+            { id: 97, he: "חוֹלֶה", translit: "Holeh", ml: "അസുഖമുള്ള", ml_trans: "Sick", cat: "תארים ומצבים" },
+            { id: 98, he: "בָּרִיא", translit: "Bari", ml: "ആരോഗ്യമുള്ള", ml_trans: "Healthy", cat: "תארים ומצבים" },
+            { id: 99, he: "שָׂמֵחַ", translit: "Same'ah", ml: "സന്തോഷമുള്ള", ml_trans: "Happy", cat: "תארים ומצבים" },
+            { id: 100, he: "עָיֵף", translit: "Ayef", ml: "ക്ഷീണിതനായ", ml_trans: "Tired", cat: "תארים ומצבים" }
+        ];
+
+        // Category Malayalam mapping for UI badges
+        const catMalayalamMap = {
+            'ברכות ובסיס': 'അഭിവാദ്യങ്ങളും അടിസ്ഥാനവും',
+            'אנשים ומשפחה': 'ആളുകളും കുടുംബവും',
+            'מקומות וסביבה': 'സ്ഥലങ്ങളും ചുറ്റുപാടും',
+            'פעלים נפוצים': 'സാധാരണ ക്രിയകൾ',
+            'שאלות ולוגיסטיקה': 'ചോദ്യങ്ങളും ലോജിസ്റ്റിക്സും',
+            'זמן ומספרים': 'സമയവും സംഖ്യകളും',
+            'אוכל ושתייה': 'ഭക്ഷണവും പാനീയവും',
+            'תארים ומצבים': 'നാമവിശേഷണങ്ങളും അവസ്ഥകളും'
+        };
+
+        // Tab Switching Logic
+        function switchTab(tab) {
+            const dictSec = document.getElementById('section-dictionary');
+            const quizSec = document.getElementById('section-quiz');
+            const tabDict = document.getElementById('tab-dict');
+            const tabQuiz = document.getElementById('tab-quiz');
+
+            if (tab === 'dictionary') {
+                dictSec.classList.remove('hidden');
+                quizSec.classList.add('hidden');
+                tabDict.className = "px-4 py-2 rounded-xl text-xs font-bold transition-all bg-white text-indigo-600 shadow-sm malayalam-text";
+                tabQuiz.className = "px-4 py-2 rounded-xl text-xs font-bold transition-all text-slate-600 hover:text-slate-900 malayalam-text";
+            } else {
+                dictSec.classList.add('hidden');
+                quizSec.classList.remove('hidden');
+                tabQuiz.className = "px-4 py-2 rounded-xl text-xs font-bold transition-all bg-white text-indigo-600 shadow-sm malayalam-text";
+                tabDict.className = "px-4 py-2 rounded-xl text-xs font-bold transition-all text-slate-600 hover:text-slate-900 malayalam-text";
+                startQuiz();
+            }
+        }
+
+        // Quiz State Variables
+        let quizQuestions = [];
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let answeredCurrent = false;
+
+        function startQuiz() {
+            currentQuestionIndex = 0;
+            score = 0;
+            answeredCurrent = false;
+            
+            quizQuestions = [...dictionaryData].sort(() => 0.5 - Math.random()).slice(0, 10);
+            
+            document.getElementById('quiz-complete').classList.add('hidden');
+            document.getElementById('quiz-options').classList.remove('hidden');
+            document.getElementById('next-btn').classList.add('hidden');
+            
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            if (currentQuestionIndex >= quizQuestions.length) {
+                document.getElementById('quiz-options').classList.add('hidden');
+                document.getElementById('next-btn').classList.add('hidden');
+                document.getElementById('quiz-complete').classList.remove('hidden');
+                document.getElementById('final-score-text').innerText = `${quizQuestions.length}-ൽ ${score} ചോദ്യങ്ങൾക്ക് നിങ്ങൾ ശരിയായി ഉത്തരം നൽകി!`;
+                return;
+            }
+
+            answeredCurrent = false;
+            document.getElementById('next-btn').classList.add('hidden');
+            document.getElementById('quiz-progress').innerText = `ചോദ്യം ${currentQuestionIndex + 1} / ${quizQuestions.length}`;
+            document.getElementById('quiz-score').innerText = `സ്കോർ: ${score}`;
+
+            const currentItem = quizQuestions[currentQuestionIndex];
+            document.getElementById('quiz-word').innerText = currentItem.he;
+            document.getElementById('quiz-translit').innerText = `(${currentItem.translit})`;
+
+            const wrongOptions = dictionaryData
+                .filter(item => item.id !== currentItem.id)
+                .sort(() => 0.5 - Math.random())
+                .slice(0, 3);
+            
+            const options = [...wrongOptions, currentItem].sort(() => 0.5 - Math.random());
+
+            const optionsContainer = document.getElementById('quiz-options');
+            optionsContainer.innerHTML = "";
+
+            options.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = "w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl text-right flex items-center justify-between hover:bg-slate-100 hover:border-indigo-200 transition-all text-sm font-medium text-slate-700";
+                btn.innerHTML = `
+                    <span class="malayalam-text font-bold">${opt.ml}</span>
+                    <span class="text-xs text-slate-400">${opt.ml_trans}</span>
+                `;
+                btn.onclick = () => selectOption(opt.id, currentItem.id, btn);
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        function selectOption(selectedId, correctId, btnElement) {
+            if (answeredCurrent) return;
+            answeredCurrent = true;
+
+            if (selectedId === correctId) {
+                score++;
+                btnElement.className = "w-full p-4 bg-green-50 border border-green-300 rounded-2xl text-right flex items-center justify-between transition-all text-sm font-bold text-green-700 shadow-sm";
+                btnElement.innerHTML += `<i class="fa-solid fa-circle-check text-green-600"></i>`;
+            } else {
+                btnElement.className = "w-full p-4 bg-red-50 border border-red-300 rounded-2xl text-right flex items-center justify-between transition-all text-sm font-bold text-red-700 shadow-sm";
+                btnElement.innerHTML += `<i class="fa-solid fa-circle-xmark text-red-600"></i>`;
+            }
+
+            document.getElementById('quiz-score').innerText = `സ്കോർ: ${score}`;
+            document.getElementById('next-btn').classList.remove('hidden');
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            loadQuestion();
+        }
+
+        // Filter by Category
+        function filterCategory(category) {
+            currentCategory = category;
+            
+            const buttons = document.querySelectorAll('.cat-btn');
+            buttons.forEach(btn => {
+                if (btn.innerText.includes(category) || (category === 'הכול' && btn.innerText.includes('എല്ലാം'))) {
+                    btn.className = "cat-btn px-4 py-2 rounded-xl text-xs font-medium whitespace-nowrap transition-all bg-indigo-600 text-white shadow-sm shadow-indigo-100 malayalam-text";
+                } else {
+                    btn.className = "cat-btn px-4 py-2 rounded-xl text-xs font-medium whitespace-nowrap transition-all bg-slate-100 text-slate-600 hover:bg-slate-200 malayalam-text";
+                }
+            });
+
+            renderWords();
+        }
+
+        // Filter words based on search input and category
+        function filterWords() {
+            renderWords();
+        }
+
+        // Render Words to Grid
+        function renderWords() {
+            const searchInput = document.getElementById('search-input');
+            const query = searchInput ? searchInput.value.trim().toLowerCase() : "";
+            const grid = document.getElementById('words-grid');
+            const emptyState = document.getElementById('empty-state');
+
+            if (!grid) return;
+
+            const filtered = dictionaryData.filter(item => {
+                const matchesCategory = (currentCategory === 'הכול' || item.cat === currentCategory);
+                const matchesQuery = 
+                    item.he.toLowerCase().includes(query) ||
+                    item.translit.toLowerCase().includes(query) ||
+                    item.ml.toLowerCase().includes(query) ||
+                    item.ml_trans.toLowerCase().includes(query);
+                return matchesCategory && matchesQuery;
+            });
+
+            grid.innerHTML = "";
+
+            if (filtered.length === 0) {
+                if (emptyState) emptyState.classList.remove('hidden');
+                return;
+            } else {
+                if (emptyState) emptyState.classList.add('hidden');
+            }
+
+            filtered.forEach(item => {
+                const card = document.createElement('div');
+                card.className = "bg-white p-5 rounded-3xl border border-slate-100 shadow-sm hover:shadow-md hover:border-indigo-100 transition-all flex flex-col justify-between group";
+                
+                const malayalamCat = catMalayalamMap[item.cat] || item.cat;
+
+                card.innerHTML = `
+                    <div>
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-xs font-medium px-3 py-1 bg-slate-100 text-slate-600 rounded-full malayalam-text">${malayalamCat}</span>
+                            <span class="text-xs font-bold text-slate-300">#${item.id}</span>
+                        </div>
+                        
+                        <div class="flex items-baseline gap-2 mb-2">
+                            <h3 class="text-2xl font-bold text-slate-800 tracking-tight">${item.he}</h3>
+                            <span class="text-sm font-medium text-indigo-600 italic">(${item.translit})</span>
+                        </div>
+
+                        <div class="border-t border-slate-100 my-3 pt-3">
+                            <div>
+                                <p class="text-xl font-semibold text-slate-700 mb-1 malayalam-text">${item.ml}</p>
+                                <p class="text-xs text-slate-400 font-medium">${item.ml_trans}</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // Initial render on load
+        window.onload = function() {
+            renderWords();
+        };
+    </script>
+</body>
+</html>
